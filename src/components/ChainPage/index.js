@@ -256,7 +256,7 @@ function GlobalPage({
 		var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
 		var url = URL.createObjectURL(blob)
 		pom.href = url
-		pom.setAttribute('download', 'foo.csv')
+		pom.setAttribute('download', 'group-tvl-by-category.csv')
 		pom.click()
 	}
 
