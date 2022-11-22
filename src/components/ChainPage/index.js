@@ -262,6 +262,7 @@ function GlobalPage({
 					<th>Total DApps</th>
 				</tr>
 				{tvlData &&
+					tvlData.length &&
 					tvlData.map((item) => {
 						return (
 							<tr key={item.category}>
