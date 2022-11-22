@@ -29,6 +29,7 @@ import { useDenominationPriceHistory } from '~/api/categories/protocols/client'
 import llamaLogo from '~/assets/peeking-llama.png'
 import { ListHeader, ListOptions } from './shared'
 import { ArrowUpRight } from 'react-feather'
+import PieChart from '../ECharts/PieChart'
 
 const EasterLlama = styled.button`
 	padding: 0;
@@ -254,6 +255,8 @@ function GlobalPage({
 					name: selectedChain === 'All' ? 'All Protocols' : selectedChain
 				}}
 			/>
+
+			{/* <PieChart chartData={tvlData || []} stackColors={colorsByChain} /> */}
 
 			<table id="table-tvl">
 				<tr>
