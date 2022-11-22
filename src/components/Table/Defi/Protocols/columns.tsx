@@ -320,3 +320,88 @@ const ListedAt = styled.div`
 const TooltipPopver = styled(Tooltip)`
 	padding: 6px;
 `
+
+export const tableTvlColumns: ColumnDef<any>[] = [
+	{
+		header: () => <Name>Name</Name>,
+		accessorKey: 'name',
+		enableSorting: false,
+		cell: ({ getValue, row, table }) => {
+			const value = getValue() as string
+			const index = row.depth === 0 ? table.getSortedRowModel().rows.findIndex((x) => x.id === row.id) : row.index
+
+			return (
+				<Name depth={row.depth}>
+					{row.subRows?.length > 0 ? (
+						<AccordionButton
+							{...{
+								onClick: row.getToggleExpandedHandler()
+							}}
+						>
+							{row.getIsExpanded() ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+						</AccordionButton>
+					) : (
+						<Bookmark readableProtocolName={value} data-lgonly data-bookmark />
+					)}
+					<span>{index + 1}</span>
+					<TokenLogo logo={tokenIconUrl(value)} data-lgonly />
+					<CustomLink href={`/protocol/${slug(value)}`}>{`${value}`}</CustomLink>
+				</Name>
+			)
+		},
+		size: 240
+	},
+	{
+		header: 'Category',
+		accessorKey: 'category',
+		meta: {
+			align: 'end'
+		},
+		size: 140
+	},
+	{
+		header: '1d Change',
+		accessorKey: 'change_1d',
+		cell: ({ getValue }) => <>{formattedPercent(getValue())}</>,
+		meta: {
+			align: 'end'
+		},
+		size: 100
+	},
+	{
+		header: '7d Change',
+		accessorKey: 'change_7d',
+		cell: ({ getValue }) => <>{formattedPercent(getValue())}</>,
+		meta: {
+			align: 'end'
+		},
+		size: 100
+	},
+	{
+		header: '1m Change',
+		accessorKey: 'change_1m',
+		cell: ({ getValue }) => <>{formattedPercent(getValue())}</>,
+		meta: {
+			align: 'end'
+		},
+		size: 100
+	},
+	{
+		header: 'TVL',
+		accessorKey: 'tvl',
+		cell: ({ getValue, row }) => <Tvl value={getValue()} rowValues={row.original} />,
+		meta: {
+			align: 'end'
+		},
+		size: 100
+	},
+	{
+		header: 'Total Dapp',
+		accessorKey: 'count',
+		// cell: ({ getValue, row }) => <Tvl value={getValue()} rowValues={row.original} />,
+		meta: {
+			align: 'end'
+		},
+		size: 100
+	}
+]

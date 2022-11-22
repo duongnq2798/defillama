@@ -30,6 +30,7 @@ import llamaLogo from '~/assets/peeking-llama.png'
 import { ListHeader, ListOptions } from './shared'
 import { ArrowUpRight } from 'react-feather'
 import PieChart from '../ECharts/PieChart'
+import { TableTVL } from '../Table/Defi/Protocols/TableTVL'
 
 const EasterLlama = styled.button`
 	padding: 0;
@@ -226,6 +227,9 @@ function GlobalPage({
 			}
 			res[value.category].tvl += Number(value.tvl)
 			res[value.category].count += 1
+			res[value.category].chains = []
+			res[value.category].url = ''
+			res[value.category].name = value.category
 			return res
 		}, {})
 
@@ -234,6 +238,8 @@ function GlobalPage({
 
 		return dataRS
 	}, [minTvl, maxTvl, protocolTotals])
+
+	console.log(finalProtocolTotals)
 
 	return (
 		<>
@@ -258,24 +264,7 @@ function GlobalPage({
 
 			{/* <PieChart chartData={tvlData || []} stackColors={colorsByChain} /> */}
 
-			<table id="table-tvl">
-				<tr>
-					<th>Category</th>
-					<th>Total TVL</th>
-					<th>Total DApps</th>
-				</tr>
-				{tvlData &&
-					tvlData.length &&
-					tvlData.map((item) => {
-						return (
-							<tr key={item.category}>
-								<td>{item.category ? item.category : 'Không xác định'}</td>
-								<td>{formattedNum(item.tvl, true)}</td>
-								<td>{item.count}</td>
-							</tr>
-						)
-					})}
-			</table>
+			<TableTVL data={tvlData} />
 		</>
 	)
 }
