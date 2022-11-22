@@ -31,6 +31,7 @@ import { ListHeader, ListOptions } from './shared'
 import { ArrowUpRight } from 'react-feather'
 import PieChart from '../ECharts/PieChart'
 import { TableTVL } from '../Table/Defi/Protocols/TableTVL'
+import { Button } from 'ariakit'
 
 const EasterLlama = styled.button`
 	padding: 0;
@@ -74,6 +75,7 @@ function GlobalPage({
 
 	const [easterEgg, setEasterEgg] = React.useState(false)
 	const [tvlData, setTVLData] = React.useState({})
+	const [tvlCsvData, setTvlCsvData] = React.useState({})
 	const [darkMode, toggleDarkMode] = useDarkModeManager()
 	const activateEasterEgg = () => {
 		if (easterEgg) {
@@ -222,24 +224,41 @@ function GlobalPage({
 		const result = []
 		dataRS.reduce((res, value) => {
 			if (!res[value.category]) {
-				res[value.category] = { category: value.category, tvl: 0, count: 0 }
+				res[value.category] = { category: value.category, tvl: 0, count: 0, change_1d: 0, change_7d: 0, change_1m: 0 }
 				result.push(res[value.category])
 			}
 			res[value.category].tvl += Number(value.tvl)
 			res[value.category].count += 1
-			res[value.category].chains = []
-			res[value.category].url = ''
 			res[value.category].name = value.category
+			res[value.category].change_1d += value.change_1d
+			res[value.category].change_7d += value.change_7d
+			res[value.category].change_1m += value.change_1m
 			return res
 		}, {})
 
 		setTVLData(result)
-		console.log(result)
+
+		const csvString = [
+			['Category', 'Change 1 day', 'Change 7 days', 'Change 1 month', 'TVL', 'Total Dapp'],
+			...result.map((item) => [item.name, item.change_1d, item.change_7d, item.change_1m, item.tvl, item.count])
+		]
+			.map((e) => e.join(','))
+			.join('\n')
+
+		setTvlCsvData(csvString)
 
 		return dataRS
 	}, [minTvl, maxTvl, protocolTotals])
 
-	console.log(finalProtocolTotals)
+	const download = () => {
+		var pom = document.createElement('a')
+		var csvContent = tvlCsvData
+		var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+		var url = URL.createObjectURL(blob)
+		pom.href = url
+		pom.setAttribute('download', 'foo.csv')
+		pom.click()
+	}
 
 	return (
 		<>
@@ -262,7 +281,9 @@ function GlobalPage({
 				}}
 			/>
 
-			{/* <PieChart chartData={tvlData || []} stackColors={colorsByChain} /> */}
+			<button className="button-tvl" onClick={() => download()} href="#">
+				Download .csv
+			</button>
 
 			<TableTVL data={tvlData} />
 		</>

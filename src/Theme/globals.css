@@ -54,6 +54,13 @@ html {
 	color: black;
 }
 
+.button-tvl {
+	background-color: rgb(33, 114, 229);
+	color: white;
+	padding: 10px 24px;
+	border-radius: 7px;
+}
+
 a {
 	text-decoration: none;
 	color: inherit;
